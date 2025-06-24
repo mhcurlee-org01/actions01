@@ -1,0 +1,11 @@
+name: workflow1
+on: push
+jobs: 
+  job1:
+    runs-on: self-hosted
+    steps:
+    - name: first step
+      run: cat /etc/os-release
+
+
+            
