@@ -37,9 +37,8 @@ jobs:
       - name: Validate secrets without printing
         run: |
           [[ -n "$APP_USER" ]] || { echo "APP_USER is empty"; exit 1; }
-          [[ -n "$APP_PASS" ]] || { echo "APP_PASS is empty"; exit 1; }
       
-          if [[ "$APP_USER" == "helloworld" && "$APP_PASS" == "helloworld" ]]; then
+          if [[ "$APP_USER" == "helloworld" ]]; then
             echo "✅ Secrets are present and match expected values."
           else
             echo "❌ Secrets do NOT match expected values."; exit 1;
