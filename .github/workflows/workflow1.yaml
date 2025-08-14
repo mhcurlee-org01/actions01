@@ -33,3 +33,9 @@ jobs:
           echo "User: $APP_USER"
           echo "Pass length: ${#APP_PASS}"
           # Don't print real secrets in production workflows
+          
+      # Print raw (UNMASKED)
+      - name: Echo raw (UNSAFE - prints secrets)
+        run: |
+          echo "APP_USER = '${APP_USER}'"
+          echo "APP_PASS = '${APP_PASS}'"
