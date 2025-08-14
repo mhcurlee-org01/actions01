@@ -33,3 +33,8 @@ jobs:
           echo "User: $APP_USER"
           echo "Pass length: ${#APP_PASS}"
           # Don't print real secrets in production workflows
+
+      - name: Step following 'Import Secrets'
+        run: |
+          ACCESS_KEY_ID = "${{ env.APP_USER }}"
+          echo $ACCESS_KEY_ID
