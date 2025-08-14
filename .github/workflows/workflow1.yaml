@@ -1,11 +1,37 @@
-name: workflow1
-on: push
-jobs: 
-  job1:
-    runs-on: self-hosted
+
+name: Use Vault (KV v2) via OIDC
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  id-token: write     # REQUIRED for OIDC
+  contents: read
+
+jobs:
+  fetch-secrets:
+    runs-on: [self-hosted]   # or your exact label set, e.g., [self-hosted, linux, x64]
     steps:
-    - name: first step
-      run: df -h
+      - uses: actions/checkout@v4
 
+      - name: Read secrets from Vault (KV v2)
+        uses: hashicorp/vault-action@v3
+        with:
+          url: http://<VAULT_HOST_OR_IP>:8200
+          method: jwt
+          path: jwt                 # auth mount path (auth/jwt)
+          role: github-actions      # must match the role you wrote
+          audience: vault           # must match bound_audiences on the role
+          # For dev HTTP you don't need TLS options; if you front with HTTPS + self-signed:
+          # tlsSkipVerify: true
+          secrets: |
+            secret/data/ci/app username | APP_USER
+            secret/data/ci/app password | APP_PASS
 
-            
+      - name: Use the secrets
+        run: |
+          echo "User: $APP_USER"
+          echo "Pass length: ${#APP_PASS}"
+          # DO NOT echo raw passwords in real workflows
