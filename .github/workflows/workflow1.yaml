@@ -27,8 +27,8 @@ jobs:
           exportEnv: true
           tlsSkipVerify: true       # dev mode is HTTP; if you add TLS with self-signed, keep this true or provide caCertificate
           secrets: |
-            secret/data/ci/app user | APP_USER
-            secret/data/ci/app password | APP_PASS
+            secret/ci/app user | APP_USER
+            secret/ci/app password | APP_PASS
 
       - name: Use secrets
         run: |
