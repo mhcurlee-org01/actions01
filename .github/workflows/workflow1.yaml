@@ -22,7 +22,7 @@ jobs:
           method: jwt
           path: jwt                 # auth mount path (auth/jwt)
           role: github-actions      # must match the role you created
-          audience: vault           # must match bound_audiences
+          audience: https://github.com/mhcurlee-org01          # must match bound_audiences
           exportEnv: true
           tlsSkipVerify: true       # dev only; prefer TLS + CA in real setups
           secrets: |-
