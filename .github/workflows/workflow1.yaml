@@ -1,5 +1,4 @@
-
-name: Fetch secrets from Vault (KV v2 via OIDC)
+name: Fetch KV v1 secrets from Vault via OIDC
 
 on:
   push:
@@ -7,25 +6,25 @@ on:
   workflow_dispatch:
 
 permissions:
-  id-token: write        # REQUIRED for OIDC
+  id-token: write
   contents: read
 
 jobs:
   fetch-secrets:
-    runs-on: [self-hosted]  # adjust to your runner's labels
+    runs-on: [self-hosted]   # or your runner's labels, e.g., [self-hosted, linux, x64]
     steps:
       - uses: actions/checkout@v4
 
-      - name: Get Vault Secrets
+      - name: Get Vault Secrets (KV v1)
         uses: hashicorp/vault-action@v3
         with:
           url: http://192.168.5.17:8200
           method: jwt
-          path: jwt
-          role: github-actions
-          audience: vault
+          path: jwt                 # auth mount path (auth/jwt)
+          role: github-actions      # must match the role you created
+          audience: vault           # must match bound_audiences
           exportEnv: true
-          tlsSkipVerify: true   # dev only
+          tlsSkipVerify: true       # dev only; prefer TLS + CA in real setups
           secrets: |
             secret/ci/app user | APP_USER
             secret/ci/app password | APP_PASS
@@ -33,5 +32,5 @@ jobs:
       - name: Use secrets
         run: |
           echo "User: $APP_USER"
-          echo "Pass (len): ${#APP_PASS}"
-          # Do NOT print real secrets in production pipelines
+          echo "Pass length: ${#APP_PASS}"
+          # Don't print real secrets in production workflows
