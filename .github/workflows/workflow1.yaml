@@ -19,7 +19,7 @@ jobs:
       - name: Read secrets from Vault (KV v2)
         uses: hashicorp/vault-action@v3
         with:
-          url: http://<VAULT_HOST_OR_IP>:8200
+          url: http://192.168.5.17:8200
           method: jwt
           path: jwt                 # auth mount path (auth/jwt)
           role: github-actions      # must match the role you wrote
