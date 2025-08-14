@@ -16,16 +16,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Get Vault Secrets (KV v2)
+      - name: Get Vault Secrets
         uses: hashicorp/vault-action@v3
         with:
           url: http://192.168.5.17:8200
           method: jwt
-          path: jwt                 # auth mount path (auth/jwt)
-          role: github-actions      # must match the role created above
-          audience: vault           # must match bound_audiences on the role
+          path: jwt
+          role: github-actions
+          audience: vault
           exportEnv: true
-          tlsSkipVerify: true       # dev mode is HTTP; if you add TLS with self-signed, keep this true or provide caCertificate
+          tlsSkipVerify: true   # dev only
           secrets: |
             secret/ci/app user | APP_USER
             secret/ci/app password | APP_PASS
