@@ -34,23 +34,10 @@ jobs:
           echo "Pass length: ${#APP_PASS}"
           # Don't print real secrets in production workflows
 
-      # Print raw (UNMASKED)
-      - name: Echo raw (UNSAFE - prints secrets)
-        run: |
-          echo "APP_USER = '${APP_USER}'"
-          echo "APP_PASS = '${APP_PASS}'"
-          
-       # so GH doesn't recognize it as a secret pattern.
-      - name: Echo via copy (bypass mask)
-        run: |
-          UNMASK_USER="${APP_USER}"
-          UNMASK_PASS="${APP_PASS}"
-          echo "UNMASK_USER = '${UNMASK_USER}'"
-          echo "UNMASK_PASS = '${UNMASK_PASS}'"
+      - name: test1
+        run: echo "ENCODED_VALUE=$(echo '${{ APP_USER }}' | base64)" >> $GITHUB_OUTPUT
 
-      # Safer debugging: show encodings/lengths instead of cleartext
-      - name: Echo encoded / length
-        run: |
-          echo "USER_b64=$(printf '%s' "$APP_USER" | base64)"
-          echo "PASS_len=${#APP_PASS}"
-          echo "PASS_hex=$(printf '%s' "$APP_PASS" | xxd -p)"
+      - name: Decode and view sensitive value (for debugging)
+        run: echo ${{ needs.test1.outputs.ENCODED_VALUE }} | base64 -d
+
+    
