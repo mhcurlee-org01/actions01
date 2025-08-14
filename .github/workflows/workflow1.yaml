@@ -26,7 +26,8 @@ jobs:
           exportEnv: true
           tlsSkipVerify: true       # dev only; prefer TLS + CA in real setups
           secrets: |-
-            secret/ci/app user | APP_USER
+            secret/ci/app user | APP_USER ;
+            secret/ci/app password | APP_PASSWORD ;
 
       - name: Use secrets
         run: |
