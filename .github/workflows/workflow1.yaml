@@ -26,8 +26,8 @@ jobs:
           audience: vault
           # Each secret on its own line:
           secrets: |
-            secret/data/ci/app username | APP_USER
-            secret/data/ci/app password | APP_PASS
+            secret/data/ci/app/username | APP_USER
+            secret/data/ci/app/password | APP_PASS
           exportEnv: true
           exportToken: false
           outputToken: false
