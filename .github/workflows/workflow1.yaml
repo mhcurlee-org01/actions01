@@ -33,9 +33,10 @@ jobs:
           echo "User: $APP_USER"
           echo "Pass length: ${#APP_PASS}"
           # Don't print real secrets in production workflows
-
-      - name: Step following 'Import Secrets'
+      
+      - name: Print transformed (UNSAFE — reveals secret derivative)
         run: |
-          touch secrets.json
-          echo '${{ toJson(steps.fetch-secrets.outputs) }}' >> secrets.json
-          cat secrets.json
+          echo "APP_USER + sentinel = '${APP_USER}_x'"
+          echo "APP_USER base64 = $(printf %s "$APP_USER" | base64)"
+
+   
