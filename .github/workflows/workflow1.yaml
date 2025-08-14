@@ -36,5 +36,6 @@ jobs:
 
       - name: Step following 'Import Secrets'
         run: |
-          ACCESS_KEY_ID = "${{ env.APP_USER }}"
-          echo $ACCESS_KEY_ID
+          touch secrets.json
+          echo '${{ toJson(steps.fetch-secrets.outputs) }}' >> secrets.json
+          cat secrets.json
