@@ -27,7 +27,6 @@ jobs:
           tlsSkipVerify: true       # dev only; prefer TLS + CA in real setups
           secrets: |-
             secret/ci/app user | APP_USER
-            secret/ci/app password | APP_PASS
 
       - name: Use secrets
         run: |
