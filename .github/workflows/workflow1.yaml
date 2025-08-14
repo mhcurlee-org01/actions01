@@ -22,7 +22,6 @@ jobs:
           method: jwt
           path: jwt                 # auth mount path (auth/jwt)
           role: github-actions      # must match the role you created
-          #audience: https://github.com/mhcurlee-org01          # must match bound_audiences
           exportEnv: true
           tlsSkipVerify: true       # dev only; prefer TLS + CA in real setups
           secrets: |-
@@ -31,10 +30,18 @@ jobs:
 
       - name: Use secrets
         run: |
-          echo "User: $APP_USER"
+          echo "User: $APP_USER" > creds.txt
           echo "Pass length: ${#APP_PASS}"
           # Don't print real secrets in production workflows
       
+      - name: upload data
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-build
+          path: ./creds.txt
+
+
+
       - name: Validate secrets without printing
         run: |
           [[ -n "$APP_USER" ]] || { echo "APP_USER is empty"; exit 1; }
