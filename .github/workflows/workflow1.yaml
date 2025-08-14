@@ -16,19 +16,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Read secrets from Vault (KV v2)
+      - name: Get Vault Secrets
         uses: hashicorp/vault-action@v3
         with:
           url: http://192.168.5.17:8200
           method: jwt
-          path: jwt                 # auth mount path (auth/jwt)
-          role: github-actions      # must match the role you wrote
-          audience: vault           # must match bound_audiences on the role
-          # For dev HTTP you don't need TLS options; if you front with HTTPS + self-signed:
-          # tlsSkipVerify: true
+          path: jwt
+          role: github-actions
+          audience: vault
+          # Each secret on its own line:
           secrets: |
             secret/data/ci/app username | APP_USER
             secret/data/ci/app password | APP_PASS
+          exportEnv: true
+          exportToken: false
+          outputToken: false
+          #tlsSkipVerify: false
 
       - name: Use the secrets
         run: |
