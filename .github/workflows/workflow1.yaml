@@ -33,11 +33,3 @@ jobs:
           echo "User: $APP_USER"
           echo "Pass length: ${#APP_PASS}"
           # Don't print real secrets in production workflows
-
-      - name: test1
-        run: echo "ENCODED_VALUE=$(echo '${{ APP_USER }}' | base64)" >> $GITHUB_OUTPUT
-
-      - name: Decode and view sensitive value (for debugging)
-        run: echo ${{ needs.test1.outputs.ENCODED_VALUE }} | base64 -d
-
-    
