@@ -19,10 +19,10 @@ jobs:
       - name: Get Vault Secrets (KV v1)
         uses: hashicorp/vault-action@v3.4.0
         env:
-          VAULT_ADDR: cat myvars.yaml | ./tools/yaml2json | jq -r '.test.url'
-          VAULT_ROLE: cat myvars.yaml | ./tools/yaml2json | jq -r '.test.rolename'
-          VAULT_TOKEN: cat myvars.yaml | ./tools/yaml2json | jq -r '.test.rolename'
-          VUALT_PATH: cat myvars.yaml | ./tools/yaml2json | jq -r '.test.path
+          VAULT_ADDR: $(cat myvars.yaml | ./tools/yaml2json | jq -r '.test.url')
+          VAULT_ROLE: $(cat myvars.yaml | ./tools/yaml2json | jq -r '.test.rolename')
+          VAULT_TOKEN: $(cat myvars.yaml | ./tools/yaml2json | jq -r '.test.rolename')
+          VUALT_PATH: $(cat myvars.yaml | ./tools/yaml2json | jq -r '.test.path)
 
         with:
           url: $VAULT_ADDR
