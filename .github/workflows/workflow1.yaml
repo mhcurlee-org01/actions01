@@ -23,7 +23,7 @@ jobs:
 
       - name: concat test vars
         run: |    
-          echo "TEST_CONCAT=${{ env.VAULT_ADDR }}_${{ env.VAULT_ROLE }}_${{ env.VUALT_PATH }}" >> $GITHUB_ENV
+          echo "TEST_CONCAT=${{ env.VAULT_ADDR }}_${{ env.VAULT_ROLE }}_${{ env.VAULT_PATH }}" >> $GITHUB_ENV
           echo "${{env.TEST_CONCAT}}"
 
       - name: Get Vault Secrets (KV v1)
