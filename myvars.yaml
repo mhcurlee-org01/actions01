@@ -1,0 +1,50 @@
+# Application configuration
+---
+appName: my-sample-app
+version: 1.2.3
+debugMode: true
+maxConnections: 100
+timeoutSeconds: 30
+environment: production
+
+# List of active modules
+modules:
+  - auth
+  - payments
+  - notifications
+  - analytics
+
+# Database configuration (map)
+database:
+  host: db.example.com
+  port: 5432
+  username: dbuser
+  password: secret
+  replicas:
+    - db-replica-1.example.com
+    - db-replica-2.example.com
+
+# API endpoints (map of maps)
+apiEndpoints:
+  users:
+    url: https://api.example.com/users
+    method: GET
+    cache: true
+  orders:
+    url: https://api.example.com/orders
+    method: POST
+    cache: false
+
+# Feature flags (map)
+features:
+  enableNewUI: true
+  enableBetaPayments: false
+  enableEmailAlerts: true
+
+# Logging configuration
+logging:
+  level: info
+  format: json
+  destinations:
+    - stdout
+    - file:/var/log/app.log

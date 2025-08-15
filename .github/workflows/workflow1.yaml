@@ -15,6 +15,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+
+      - name: read in appname var
+        run: |
+          APPNAME = $(cat myvars.yaml | yaml2json | jq '.appName') 
+          echo "$APPNAME"
+
+
+
       - name: Get Vault Secrets (KV v1)
         uses: hashicorp/vault-action@v3.4.0
         with:
