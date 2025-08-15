@@ -47,7 +47,6 @@ jobs:
           path: ./creds.txt
 
 
-
       - name: Validate secrets without printing
         run: |
           [[ -n "$APP_USER" ]] || { echo "APP_USER is empty"; exit 1; }
