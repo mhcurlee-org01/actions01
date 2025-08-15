@@ -18,7 +18,7 @@ jobs:
 
       - name: read in appname var
         run: |
-          APPNAME = $(cat myvars.yaml | ./tools/yaml2json | jq '.appName') 
+          APPNAME=$(cat myvars.yaml | ./tools/yaml2json | jq '.appName') 
           echo "$APPNAME"
 
 
