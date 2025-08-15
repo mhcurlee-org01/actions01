@@ -16,20 +16,19 @@ jobs:
       - uses: actions/checkout@v4
 
 
-      - name: read in appname var
-        run: |
-          APPNAME=$(cat myvars.yaml | ./tools/yaml2json | jq -r '.appName') 
-          echo "$APPNAME"
-
-
-
       - name: Get Vault Secrets (KV v1)
         uses: hashicorp/vault-action@v3.4.0
+        env:
+          VAULT_ADDR: cat myvars.yaml | ./tools/yaml2json | jq -r '.test.url'
+          VAULT_ROLE: cat myvars.yaml | ./tools/yaml2json | jq -r '.test.rolename'
+          VAULT_TOKEN: cat myvars.yaml | ./tools/yaml2json | jq -r '.test.rolename'
+          VUALT_PATH: cat myvars.yaml | ./tools/yaml2json | jq -r '.test.path
+
         with:
-          url: http://192.168.5.17:8200
+          url: $VAULT_ADDR
           method: jwt
-          path: jwt                 # auth mount path (auth/jwt)
-          role: github-actions      # must match the role you created
+          path: $VUALT_PATH
+          role: $VAULT_ROLE
           exportEnv: true
           tlsSkipVerify: true       # dev only; prefer TLS + CA in real setups
           secrets: |-

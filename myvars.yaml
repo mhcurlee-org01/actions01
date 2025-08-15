@@ -7,6 +7,14 @@ maxConnections: 100
 timeoutSeconds: 30
 environment: production
 
+
+# TEST EVN
+test:
+  url:  http://192.168.5.17:8200
+  rolename: github-actions 
+  path: jwt
+
+
 # List of active modules
 modules:
   - auth
