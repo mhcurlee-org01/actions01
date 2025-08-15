@@ -20,6 +20,9 @@ jobs:
           echo "VAULT_ADDR=$(cat myvars.yaml | ./tools/yaml2json | jq -r '.test.url')" >> $GITHUB_ENV
           echo "VAULT_ROLE=$(cat myvars.yaml | ./tools/yaml2json | jq -r '.test.rolename')" >> $GITHUB_ENV
           echo "VUALT_PATH=$(cat myvars.yaml | ./tools/yaml2json | jq -r '.test.path')" >> $GITHUB_ENV
+          echo "TEST_CONCAT=${{ env.VAULT_ADDR }}_${{ env.VAULT_ROLE }}_${{ env.VUALT_PATH }}" >> $GITHUB_ENV
+          }}
+          echo "${{env.TEST_CONCAT}}"
 
       - name: Get Vault Secrets (KV v1)
         uses: hashicorp/vault-action@v3.4.0
