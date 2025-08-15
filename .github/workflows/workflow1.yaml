@@ -15,23 +15,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-
       - name: get vars
         run: |
-          echo VAULT_ADDR=$(cat myvars.yaml | ./tools/yaml2json | jq -r '.test.url') >> $GITHUB_ENV
-          echo VAULT_ROLE=$(cat myvars.yaml | ./tools/yaml2json | jq -r '.test.rolename') >> $GITHUB_ENV
-          echo VUALT_PATH=$(cat myvars.yaml | ./tools/yaml2json | jq -r '.test.path') >> $GITHUB_ENV
-
+          echo "VAULT_ADDR=$(cat myvars.yaml | ./tools/yaml2json | jq -r '.test.url')" >> $GITHUB_ENV
+          echo "VAULT_ROLE=$(cat myvars.yaml | ./tools/yaml2json | jq -r '.test.rolename')" >> $GITHUB_ENV
+          echo "VUALT_PATH=$(cat myvars.yaml | ./tools/yaml2json | jq -r '.test.path')" >> $GITHUB_ENV
 
       - name: Get Vault Secrets (KV v1)
         uses: hashicorp/vault-action@v3.4.0
         with:
-          url: $VAULT_ADDR
+          url: ${{ env.VAULT_ADDR }}
           method: jwt
-          path: $VUALT_PATH
-          role: $VAULT_ROLE
+          path: ${{ env.VUALT_PATH }}
+          role: ${{ env.VAULT_ROLE }}
           exportEnv: true
-          tlsSkipVerify: true       # dev only; prefer TLS + CA in real setups
+          tlsSkipVerify: true
           secrets: |-
             secret/ci/app user | APP_USER ;
             secret/ci/app password | APP_PASSWORD ;
