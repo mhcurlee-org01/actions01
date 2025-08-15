@@ -20,8 +20,7 @@ jobs:
         run: |
           echo VAULT_ADDR=$(cat myvars.yaml | ./tools/yaml2json | jq -r '.test.url') >> $GITHUB_ENV
           echo VAULT_ROLE=$(cat myvars.yaml | ./tools/yaml2json | jq -r '.test.rolename') >> $GITHUB_ENV
-          echo VAULT_TOKEN=$(cat myvars.yaml | ./tools/yaml2json | jq -r '.test.rolename') >> $GITHUB_ENV
-          echo VUALT_PATH=$(cat myvars.yaml | ./tools/yaml2json | jq -r '.test.path) >> $GITHUB_ENV
+          echo VUALT_PATH=$(cat myvars.yaml | ./tools/yaml2json | jq -r '.test.path') >> $GITHUB_ENV
 
 
       - name: Get Vault Secrets (KV v1)
