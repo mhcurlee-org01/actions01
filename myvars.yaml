@@ -8,7 +8,7 @@ timeoutSeconds: 30
 environment: production
 
 
-# TEST EVN
+# TEST ENV
 test:
   url:  http://192.168.5.17:8200
   rolename: github-actions 
