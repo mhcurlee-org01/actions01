@@ -8,22 +8,19 @@ on:
 permissions:
   id-token: write
   contents: read
-
+env:
+  YAML_CONFIG: myvars.yaml
 jobs:
   fetch-secrets:
     runs-on: [self-hosted]   # or your runner's labels, e.g., [self-hosted, linux, x64]
     steps:
       - uses: actions/checkout@v4
 
-      - name: check for yq
-        run: |
-          yq --version || { echo "yq is not installed"; exit 1; }
-
       - name: get vars
         run: |
-          echo "VAULT_ADDR=$(cat myvars.yaml | ./tools/yaml2json | jq -r '.test.url')" >> $GITHUB_ENV
-          echo "VAULT_ROLE=$(cat myvars.yaml | ./tools/yaml2json | jq -r '.test.rolename')" >> $GITHUB_ENV
-          echo "VAULT_PATH=$(cat myvars.yaml | ./tools/yaml2json | jq -r '.test.path')" >> $GITHUB_ENV
+          echo "VAULT_ADDR=$(yq '.test.url' < $YAML_CONFIG)" >> $GITHUB_ENV
+          echo "VAULT_ROLE=$(yq '.test.rolename' < $YAML_CONFIG)" >> $GITHUB_ENV
+          echo "VAULT_PATH=$(yq '.test.path' < $YAML_CONFIG)" >> $GITHUB_ENV
 
       - name: concat test vars
         run: |    
