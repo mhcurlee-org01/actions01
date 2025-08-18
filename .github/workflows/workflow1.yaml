@@ -15,6 +15,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: check for yq
+        run: |
+          yq --version || { echo "yq is not installed"; exit 1; }
+
       - name: get vars
         run: |
           echo "VAULT_ADDR=$(cat myvars.yaml | ./tools/yaml2json | jq -r '.test.url')" >> $GITHUB_ENV
