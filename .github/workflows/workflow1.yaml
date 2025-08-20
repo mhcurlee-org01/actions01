@@ -32,7 +32,6 @@ jobs:
         with:
           url: ${{ env.VAULT_ADDR }}
           method: jwt
-          path: ${{ env.VAULT_PATH }}
           role: ${{ env.VAULT_ROLE }}
           exportEnv: true
           tlsSkipVerify: true
