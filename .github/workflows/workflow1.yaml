@@ -23,38 +23,15 @@ jobs:
 
       - name: Install PyYAML
         run: python3 -m pip install --user pyyaml
-
+        
       - name: Convert YAML to JSON + build secrets block
         id: convert
-        run: |
-          python3 - <<'PY'
-          import os, json, yaml
+        env:
+          YAML_CONFIG: ${{ env.YAML_CONFIG }}
+          ENV_NAME: ${{ env.ENV_NAME }}
+        run: python3 scripts/parse_env.py
 
-          env_name  = os.getenv("ENV_NAME")
-          file_path = os.environ["YAML_CONFIG"]
 
-          with open(file_path) as f:
-            y = yaml.safe_load(f)
-
-          section = y[env_name]      
-          # Compact JSON for fromJSON(...)
-          json_str = json.dumps(section, separators=(",", ":"))
-
-          # Build the multiline secrets block exactly as vault-action expects:
-          #   <path> <key> | <ENV_NAME> ;
-          lines = []
-          for s in section.get("secrets", []):
-            lines.append(f"{s['path']} {s['key']} | {s['env_name']} ;")
-
-          # Write two outputs (multiline-safe form)
-          with open(os.environ["GITHUB_OUTPUT"], "a") as out:
-            out.write("json<<JSON\n")
-            out.write(json_str + "\nJSON\n")
-            out.write("secrets<<SECS\n")
-            out.write("\n".join(lines) + "\nSECS\n")
-          PY
-
-          
   fetch-secrets:
     runs-on: [self-hosted]
     needs: parse_yaml
