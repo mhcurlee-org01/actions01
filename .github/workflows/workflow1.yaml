@@ -76,8 +76,7 @@ jobs:
           exportEnv: true
           tlsSkipVerify: true
           secrets: |
-            secret/ci/app user | APP_USER ;
-            secret/ci/app password | APP_PASSWORD
+            ${{ needs.parse_yaml.outputs.secrets }}
             
 
       - name: test env
