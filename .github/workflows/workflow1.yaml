@@ -53,7 +53,7 @@ jobs:
         id: vars
         shell: bash
         run: |
-          j="$(cat $JSON_CONFIG)"
+          j="$(echo -n $JSON_CONFIG)"
 
           # Pull top-level settings
           echo "url=$(jq -r '.test.url' <<<"$j")" >> "$GITHUB_OUTPUT"
