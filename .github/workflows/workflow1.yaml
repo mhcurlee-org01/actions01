@@ -83,7 +83,8 @@ jobs:
           exportEnv: true
           tlsSkipVerify: true
           secrets: |
-             ${{ env.VAULT_SECRETS }}
+             ${{ join(fromJson(env.JSON_CONFIG).test.secrets, '') }}
+             
 
 
       - name: test env
