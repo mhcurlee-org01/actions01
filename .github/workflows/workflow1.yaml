@@ -24,7 +24,8 @@ jobs:
         run: |
           python3 -c "
           import sys, json, yaml
-          with open("./${{env.YAML_CONFIG}}") as f:
+          file_path = os.environ[${{env.YAML_CONFIG}}]
+          with open(file_path) as f:
             data = yaml.safe_load(f)
             print(f'json={json.dumps(data)}')
             " >> $GITHUB_OUTPUT
