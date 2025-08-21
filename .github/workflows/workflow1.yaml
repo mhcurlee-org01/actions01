@@ -48,40 +48,44 @@ jobs:
           echo 'JSON_CONFIG<<EOF' >> $GITHUB_ENV
           echo '${{ needs.parse_yaml.outputs.json }}' >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
-
-
-      - name: test var
-        run: | 
-          echo $JSON_CONFIG
           
-      - name: Extract & export values
+      - name: Load Vault settings + build secrets list
+        id: vars
+        shell: bash
         run: |
-          echo "VAULT_URL=$(echo $JSON_CONFIG | jq -r '.test.url')" >> $GITHUB_ENV
-          echo "ROLE=$(echo $JSON_CONFIG | jq -r '.test.rolename')" >> $GITHUB_ENV
-          echo "JWT_PATH=$(echo $JSON_CONFIG | jq -r '.test.path')" >> $GITHUB_ENV
+          j="$(cat $JSON_CONFIG)"
 
-      - name: Format Vault secrets into single-line JSON array
-        id: format_secrets
-        run: |
-          jq -nc --argjson secrets "$JSON_CONFIG" \
-            '$secrets.test.secrets | map("\(.path) \(.key) | \(.env_name)")' > secrets.json
-      
-          echo "secrets=$(cat secrets.json)" >> $GITHUB_OUTPUT
-        env:
-          JSON_CONFIG: ${{ env.JSON_CONFIG }}
-    
+          # Pull top-level settings
+          echo "url=$(jq -r '.test.url' <<<"$j")" >> "$GITHUB_OUTPUT"
+          echo "role=$(jq -r '.test.rolename' <<<"$j")" >> "$GITHUB_OUTPUT"
+          echo "auth_path=$(jq -r '.test.path' <<<"$j")" >> "$GITHUB_OUTPUT"
+
+          # Build the multi-line 'secrets' string for vault-action:
+          #   secret/path key | ENV_NAME ;
+          jq -r '
+            .test.secrets
+            | map("\(.path) \(.key) | \(.env_name) ;")
+            | join("\n")
+          ' <<<"$j" > /tmp/secrets.txt
+
+          {
+            echo "secrets<<EOF"
+            cat /tmp/secrets.txt
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
 
       - name: Get Vault Secrets (KV v1)
         uses: hashicorp/vault-action@v3.4.0
         with:
-          url: ${{ env.VAULT_URL }}
+          url: ${{ steps.vars.outputs.url }}
           method: jwt
-          role: ${{ env.VAULT_ROLE }}
-          path: ${{ env.VAULT_PATH }}
+          role: ${{ steps.vars.outputs.role }}
+          path: ${{ steps.vars.outputs.path }}
           exportEnv: true
           tlsSkipVerify: true
-          secrets: ${{ join(fromJson(steps.format_secrets.outputs.secrets), '
-                   ') }}
+          secrets: ${{ steps.vars.outputs.secrets }}
+            
              
 
 
