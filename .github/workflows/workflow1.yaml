@@ -56,9 +56,9 @@ jobs:
         shell: bash
         run: |
           j="$(echo -n $JSON_CONFIG)"
-          echo "url=$(jq --arg env_name $ENV_NAME -r '.$env_name.url' <<<"$j")" >> "$GITHUB_OUTPUT"
-          echo "role=$(jq --arg env_name $ENV_NAME -r '.$env_name.rolename' <<<"$j")" >> "$GITHUB_OUTPUT"
-          echo "auth_path=$(jq --arg env_name $ENV_NAME -r '.$env_name.path' <<<"$j")" >> "$GITHUB_OUTPUT"
+          echo "url=$(jq --arg env_name "$ENV_NAME" -r '.$env_name.url' <<<"$j")" >> "$GITHUB_OUTPUT"
+          echo "role=$(jq --arg env_name "$ENV_NAME" -r '.$env_name.rolename' <<<"$j")" >> "$GITHUB_OUTPUT"
+          echo "auth_path=$(jq --arg env_name "$ENV_NAME" -r '.$env_name.path' <<<"$j")" >> "$GITHUB_OUTPUT"
 
     
 
