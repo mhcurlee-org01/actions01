@@ -23,14 +23,16 @@ jobs:
         id: convert
         run: |
           python3 -c '
-          import sys, json, yaml, os
+          import os, json, yaml
+          
           file_path = os.environ["YAML_CONFIG"]
           with open(file_path) as f:
-            data = yaml.safe_load(f)
-            print(f"json={json.dumps(data)}")
-            ' >> $GITHUB_OUTPUT
+              data = yaml.safe_load(f)
+          
+          json_str = json.dumps(data)
+          with open(os.environ["GITHUB_OUTPUT"], "a") as out:
+              out.write(f"json={json_str}\n")'
 
-      - name: Debug output value
         run: "echo Output was: ${{ steps.convert.outputs.config_json }} "
 
 
