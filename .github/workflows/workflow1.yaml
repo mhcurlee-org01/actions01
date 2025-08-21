@@ -35,6 +35,8 @@ jobs:
           role: ${{ env.VAULT_ROLE }}
           exportEnv: true
           tlsSkipVerify: true
+          secrets: | 
+            secret/ci/app ** | MYAPP_ ;
 
 
       - name: test env
