@@ -24,7 +24,7 @@ jobs:
         id: convert
         run: |
           python3 -c '
-          import os, json, 
+          import os, json, yaml
           env_name = os.getenv("ENV_NAME")
         
           file_path = os.environ["YAML_CONFIG"]
