@@ -49,6 +49,14 @@ jobs:
         run: |
           echo "JSON_CONFIG=${{ needs.parse_yaml.outputs.json }}" >> $GITHUB_ENV
 
+
+      - name: Export JSON to GITHUB_ENV
+        run: |
+          echo 'JSON_CONFIG<<EOF' >> $GITHUB_ENV
+          echo '${{ needs.parse_yaml.outputs.json }}' >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+
+
       - name: test var
         run: | 
           echo $JSON_CONFIG
