@@ -35,10 +35,13 @@ jobs:
           role: ${{ env.VAULT_ROLE }}
           exportEnv: true
           tlsSkipVerify: true
-          secrets: |-
-            secret/ci/app user | APP_USER ;
-            secret/ci/app password | APP_PASSWORD ;
 
+
+      - name: test env
+        run: | 
+          env
+
+          
       - name: Use secrets
         run: |
           echo "User: $APP_USER" > creds.txt
