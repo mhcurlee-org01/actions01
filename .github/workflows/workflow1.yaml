@@ -40,14 +40,17 @@ jobs:
   fetch-secrets:
     runs-on: [self-hosted]
     env:
-      JSON_CONFIG: ${{ needs.parse_yaml.outputs.json }}
       CONFIG_ENV: test
     steps:
       - uses: actions/checkout@v4
 
+      - name: load json
+        run: |
+          echo "JSON_CONFIG=${{ needs.parse_yaml.outputs.json }}" >> $GITHUB_ENV
+
       - name: test var
         run: | 
-          echo $JSON_CONFIG
+          echo ${{ env.JSON_CONFIG }}
           
       - name: Extract & export values
         run: |
