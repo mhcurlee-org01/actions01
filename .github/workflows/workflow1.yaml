@@ -14,7 +14,7 @@ env:
 
 jobs:
   parse_yaml:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted]
     outputs:
       json:    ${{ steps.convert.outputs.json }}
       secrets: ${{ steps.convert.outputs.secrets }}
@@ -54,12 +54,7 @@ jobs:
             out.write("\n".join(lines) + "\nSECS\n")
           PY
 
-      - name: Debug (optional)
-        run: |
-          echo "JSON: ${{ steps.convert.outputs.json }}"
-          printf "SECRETS:\n%s\n" "${{ steps.convert.outputs.secrets }}"
-
-    
+          
   fetch-secrets:
     runs-on: [self-hosted]
     needs: parse_yaml
@@ -78,11 +73,6 @@ jobs:
           secrets: | 
             ${{ needs.parse_yaml.outputs.secrets }}
             
-
-      - name: test env
-        run: | 
-          env
-
           
       - name: Use secrets
         run: |
