@@ -14,6 +14,14 @@ test:
   url:  http://192.168.5.17:8200
   rolename: github-actions 
   path: jwt
+  secrets:
+    - path: secret/ci/app
+      key: user
+      env_name: APP_USER
+    - path: secret/ci/app password
+      key: password
+      env_name: APP_PASSWORD
+
 
 
 # List of active modules

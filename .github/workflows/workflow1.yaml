@@ -10,22 +10,48 @@ permissions:
   contents: read
 env:
   YAML_CONFIG: myvars.yaml
+
 jobs:
-  fetch-secrets:
-    runs-on: [self-hosted]   # or your runner's labels, e.g., [self-hosted, linux, x64]
+  parse_yaml:
+    runs-on: ubuntu-latest
+    outputs:
+      config_json: ${{ steps.convert.outputs.json }}
     steps:
       - uses: actions/checkout@v4
 
-      - name: get vars
+      - name: Convert YAML to JSON with Python
+        id: convert
         run: |
-          echo "VAULT_ADDR=$(yq '.test.url' < $YAML_CONFIG)" >> $GITHUB_ENV
-          echo "VAULT_ROLE=$(yq '.test.rolename' < $YAML_CONFIG)" >> $GITHUB_ENV
-          echo "VAULT_PATH=$(yq '.test.path' < $YAML_CONFIG)" >> $GITHUB_ENV
+          python3 -c "
+          import sys, json, yaml
+          with open(${{env.YAML_CONFIG}}) as f:
+            data = yaml.safe_load(f)
+            print(f'json={json.dumps(data)}')
+            " >> $GITHUB_OUTPUT
 
-      - name: concat test vars
-        run: |    
-          echo "TEST_CONCAT=${{ env.VAULT_ADDR }}_${{ env.VAULT_ROLE }}_${{ env.VAULT_PATH }}" >> $GITHUB_ENV
-          echo "${{env.TEST_CONCAT}}"
+
+  fetch-secrets:
+    runs-on: [self-hosted]
+    env:
+      CONFIG_ENV: test
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: load json
+        run: |
+          echo "JSON_CONFIG=${{ needs.parse_yaml.outputs.config_json }}" >> $GITHUB_ENV
+
+      - name: Extract & export values
+        run: |
+          echo "VAULT_URL=$(echo \"$JSON_CONFIG\" | jq -r '.test.url')" >> $GITHUB_ENV
+          echo "ROLE=$(echo \"$JSON_CONFIG\" | jq -r '.test.rolename')" >> $GITHUB_ENV
+          echo "JWT_PATH=$(echo \"$JSON_CONFIG\" | jq -r '.test.path')" >> $GITHUB_ENV
+  
+          echo "VAULT_SECRETS<<EOF" >> $GITHUB_ENV
+          echo "$JSON_CONFIG" | jq -r '.test.secrets[] | "\(.path) \(.key) | \(.env_name)"' >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+      
+    
 
       - name: Get Vault Secrets (KV v1)
         uses: hashicorp/vault-action@v3.4.0
@@ -33,10 +59,10 @@ jobs:
           url: ${{ env.VAULT_ADDR }}
           method: jwt
           role: ${{ env.VAULT_ROLE }}
+          path: ${{ env.VAULT_PATH }}
           exportEnv: true
           tlsSkipVerify: true
-          secrets: | 
-            secret/ci/app * | MYAPP_ ;
+          secrets: ${{ env.VAULT_SECRETS }}
 
 
       - name: test env
