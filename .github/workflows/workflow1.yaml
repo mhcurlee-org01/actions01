@@ -15,7 +15,7 @@ jobs:
   parse_yaml:
     runs-on: ubuntu-latest
     outputs:
-      config_json: ${{ steps.convert.outputs.json }}
+      json: ${{ steps.convert.outputs.json }}
     steps:
       - uses: actions/checkout@v4
 
@@ -34,13 +34,13 @@ jobs:
               out.write(f"json={json_str}\n")'
 
       - name: Debug output value
-        run: "echo Output was: ${{ steps.convert.outputs.config_json }} "
+        run: "echo Output was: ${{ steps.convert.outputs.json }} "
 
 
   fetch-secrets:
     runs-on: [self-hosted]
     env:
-      JSON_CONFIG: ${{ needs.parse_yaml.outputs.config_json }}
+      JSON_CONFIG: ${{ needs.parse_yaml.outputs.json }}
       CONFIG_ENV: test
     steps:
       - uses: actions/checkout@v4
