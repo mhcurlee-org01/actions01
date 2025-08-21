@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Convert YAML to JSON with Python
+      - name: Convert YAML to JSON
         id: convert
         run: |
           python3 -c '
@@ -39,6 +39,7 @@ jobs:
 
   fetch-secrets:
     runs-on: [self-hosted]
+    needs: parse_yaml
     env:
       CONFIG_ENV: test
     steps:
