@@ -76,7 +76,7 @@ jobs:
       - name: Get Vault Secrets (KV v1)
         uses: hashicorp/vault-action@v3.4.0
         with:
-          url: ${{ env.VAULT_ADDR }}
+          url: ${{ env.VAULT_URL }}
           method: jwt
           role: ${{ env.VAULT_ROLE }}
           path: ${{ env.VAULT_PATH }}
