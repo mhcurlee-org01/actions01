@@ -24,13 +24,14 @@ jobs:
         id: convert
         run: |
           python3 -c '
-          import os, json, yaml
-          
+          import os, json, 
+          env_name = os.getenv("ENV_NAME")
+        
           file_path = os.environ["YAML_CONFIG"]
           with open(file_path) as f:
               data = yaml.safe_load(f)
           
-          json_str = json.dumps(data["test"])
+          json_str = json.dumps(data[env_name])
           with open(os.environ["GITHUB_OUTPUT"], "a") as out:
               out.write(f"json={json_str}\n")'
 
