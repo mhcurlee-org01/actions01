@@ -40,6 +40,8 @@ jobs:
   fetch-secrets:
     runs-on: [self-hosted]
     needs: parse_yaml
+    env:
+      ENV_NAME: test
     steps:
       - uses: actions/checkout@v4
 
@@ -54,10 +56,9 @@ jobs:
         shell: bash
         run: |
           j="$(echo -n $JSON_CONFIG)"
-
-          echo "url=$(jq -r '.test.url' <<<"$j")" >> "$GITHUB_OUTPUT"
-          echo "role=$(jq -r '.test.rolename' <<<"$j")" >> "$GITHUB_OUTPUT"
-          echo "auth_path=$(jq -r '.test.path' <<<"$j")" >> "$GITHUB_OUTPUT"
+          echo "url=$(jq -r '.$ENV_NAME.url' <<<"$j")" >> "$GITHUB_OUTPUT"
+          echo "role=$(jq -r '.$ENV_NAME.rolename' <<<"$j")" >> "$GITHUB_OUTPUT"
+          echo "auth_path=$(jq -r '.$ENV_NAME.path' <<<"$j")" >> "$GITHUB_OUTPUT"
 
     
 
