@@ -75,7 +75,7 @@ jobs:
           path: ${{ fromJSON(needs.parse_yaml.outputs.json).path }}
           exportEnv: true
           tlsSkipVerify: true
-          secrets: |
+          secrets: | 
             ${{ needs.parse_yaml.outputs.secrets }}
             
 
