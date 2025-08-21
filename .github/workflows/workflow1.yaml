@@ -59,11 +59,7 @@ jobs:
           echo "role=$(jq -r '.test.rolename' <<<"$j")" >> "$GITHUB_OUTPUT"
           echo "auth_path=$(jq -r '.test.path' <<<"$j")" >> "$GITHUB_OUTPUT"
 
-          # Build block with the "|" header
-          {
-            echo "secrets= |"
-            jq -r '.test.secrets[] | "  \(.path) \(.key) | \(.env_name)"' <<<"$j"
-          } >> "$GITHUB_OUTPUT"
+    
 
 
       - name: Get Vault Secrets (KV v1)
