@@ -50,7 +50,7 @@ jobs:
 
       - name: test var
         run: | 
-          echo ${{ env.JSON_CONFIG }}
+          echo $JSON_CONFIG
           
       - name: Extract & export values
         run: |
