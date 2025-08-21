@@ -53,25 +53,16 @@ jobs:
         id: vars
         shell: bash
         run: |
-          j="$(echo -n $JSON_CONFIG)"
+          j="$(cat myvars.json)"
 
-          # Pull top-level settings
           echo "url=$(jq -r '.test.url' <<<"$j")" >> "$GITHUB_OUTPUT"
           echo "role=$(jq -r '.test.rolename' <<<"$j")" >> "$GITHUB_OUTPUT"
           echo "auth_path=$(jq -r '.test.path' <<<"$j")" >> "$GITHUB_OUTPUT"
 
-          # Build the multi-line 'secrets' string for vault-action:
-          #   secret/path key | ENV_NAME ;
-          jq -r '
-            .test.secrets
-            | map("\(.path) \(.key) | \(.env_name) ;")
-            | join("\n")
-          ' <<<"$j" > /tmp/secrets.txt
-
+          # Build block with the "|" header
           {
-            echo "secrets<<EOF"
-            cat /tmp/secrets.txt
-            echo "EOF"
+            echo "secrets=|"
+            jq -r '.test.secrets[] | "  \(.path) \(.key) | \(.env_name)"' <<<"$j"
           } >> "$GITHUB_OUTPUT"
 
 
