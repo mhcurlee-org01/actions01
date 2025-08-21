@@ -63,12 +63,12 @@ jobs:
           
       - name: Extract & export values
         run: |
-          echo "VAULT_URL=$(echo \"$JSON_CONFIG\" | jq -r '.test.url')" >> $GITHUB_ENV
-          echo "ROLE=$(echo \"$JSON_CONFIG\" | jq -r '.test.rolename')" >> $GITHUB_ENV
-          echo "JWT_PATH=$(echo \"$JSON_CONFIG\" | jq -r '.test.path')" >> $GITHUB_ENV
+          echo "VAULT_URL=$(echo $JSON_CONFIG | jq -r '.test.url')" >> $GITHUB_ENV
+          echo "ROLE=$(echo $JSON_CONFIG | jq -r '.test.rolename')" >> $GITHUB_ENV
+          echo "JWT_PATH=$(echo $JSON_CONFIG | jq -r '.test.path')" >> $GITHUB_ENV
   
           echo "VAULT_SECRETS<<EOF" >> $GITHUB_ENV
-          echo "$JSON_CONFIG" | jq -r '.test.secrets[] | "\(.path) \(.key) | \(.env_name)"' >> $GITHUB_ENV
+          echo $JSON_CONFIG | jq -r '.test.secrets[] | "\(.path) \(.key) | \(.env_name)"' >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
       
     
