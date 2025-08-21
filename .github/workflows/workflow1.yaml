@@ -30,6 +30,9 @@ jobs:
             print(f"json={json.dumps(data)}")
             ' >> $GITHUB_OUTPUT
 
+      - name: Debug output value
+        run: "echo Output was: ${{ steps.convert.outputs.config_json }} "
+
 
   fetch-secrets:
     runs-on: [self-hosted]
