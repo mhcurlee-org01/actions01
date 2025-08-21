@@ -53,7 +53,7 @@ jobs:
         id: vars
         shell: bash
         run: |
-          j="$(cat myvars.json)"
+          j="$(echo -n $JSON_CONFIG)"
 
           echo "url=$(jq -r '.test.url' <<<"$j")" >> "$GITHUB_OUTPUT"
           echo "role=$(jq -r '.test.rolename' <<<"$j")" >> "$GITHUB_OUTPUT"
