@@ -67,7 +67,6 @@ jobs:
           echo "ROLE=$(echo $JSON_CONFIG | jq -r '.test.rolename')" >> $GITHUB_ENV
           echo "JWT_PATH=$(echo $JSON_CONFIG | jq -r '.test.path')" >> $GITHUB_ENV
 
-
       - name: Format Vault secrets from JSON
         id: format_secrets
         run: |
@@ -88,7 +87,8 @@ jobs:
           path: ${{ env.VAULT_PATH }}
           exportEnv: true
           tlsSkipVerify: true
-          secrets: ${{ steps.format_secrets.outputs.secrets }}
+          secrets: |
+            ${{ steps.format_secrets.outputs.secrets }}
              
 
 
