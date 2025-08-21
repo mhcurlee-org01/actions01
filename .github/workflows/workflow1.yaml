@@ -82,7 +82,8 @@ jobs:
           path: ${{ env.VAULT_PATH }}
           exportEnv: true
           tlsSkipVerify: true
-          secrets: ${{ env.VAULT_SECRETS }}
+          secrets: |
+             ${{ env.VAULT_SECRETS }}
 
 
       - name: test env
