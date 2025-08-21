@@ -23,7 +23,7 @@ jobs:
         id: convert
         run: |
           python3 -c "
-          import sys, json, yaml
+          import sys, json, yaml, os
           file_path = os.environ[${{env.YAML_CONFIG}}]
           with open(file_path) as f:
             data = yaml.safe_load(f)
