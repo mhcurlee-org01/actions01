@@ -37,6 +37,14 @@ jobs:
         run: "echo Output was: ${{ steps.convert.outputs.json }} "
 
     
+  fetch-secrets:
+    runs-on: [self-hosted]
+    needs: parse_yaml
+    env:
+      ENV_NAME: test
+    steps:
+      - uses: actions/checkout@v4
+
       - name: Get Vault Secrets (KV v1)
         uses: hashicorp/vault-action@v3.4.0
         with:
