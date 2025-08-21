@@ -16,27 +16,48 @@ jobs:
   parse_yaml:
     runs-on: ubuntu-latest
     outputs:
-      json: ${{ steps.convert.outputs.json }}
+      json:    ${{ steps.convert.outputs.json }}
+      secrets: ${{ steps.convert.outputs.secrets }}
     steps:
       - uses: actions/checkout@v4
 
-      - name: Convert YAML to JSON
+      - name: Install PyYAML
+        run: python3 -m pip install --user pyyaml
+
+      - name: Convert YAML to JSON + build secrets block
         id: convert
         run: |
-          python3 -c '
+          python3 - <<'PY'
           import os, json, yaml
-          env_name = os.getenv("ENV_NAME")
-        
-          file_path = os.environ["YAML_CONFIG"]
-          with open(file_path) as f:
-              data = yaml.safe_load(f)
-          
-          json_str = json.dumps(data[env_name])
-          with open(os.environ["GITHUB_OUTPUT"], "a") as out:
-              out.write(f"json={json_str}\n")'
 
-      - name: Debug output value
-        run: "echo Output was: ${{ steps.convert.outputs.json }} "
+          env_name  = os.getenv("ENV_NAME")
+          file_path = os.environ["YAML_CONFIG"]
+
+          with open(file_path) as f:
+            y = yaml.safe_load(f)
+
+          section = y[env_name]      
+          # Compact JSON for fromJSON(...)
+          json_str = json.dumps(section, separators=(",", ":"))
+
+          # Build the multiline secrets block exactly as vault-action expects:
+          #   <path> <key> | <ENV_NAME> ;
+          lines = []
+          for s in section.get("secrets", []):
+            lines.append(f"{s['path']} {s['key']} | {s['env_name']} ;")
+
+          # Write two outputs (multiline-safe form)
+          with open(os.environ["GITHUB_OUTPUT"], "a") as out:
+            out.write("json<<JSON\n")
+            out.write(json_str + "\nJSON\n")
+            out.write("secrets<<SECS\n")
+            out.write("\n".join(lines) + "\nSECS\n")
+          PY
+
+      - name: Debug (optional)
+        run: |
+          echo "JSON: ${{ steps.convert.outputs.json }}"
+          printf "SECRETS:\n%s\n" "${{ steps.convert.outputs.secrets }}"
 
     
   fetch-secrets:
