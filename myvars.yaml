@@ -17,7 +17,7 @@ test:
     - path: secret/ci/app
       key: user
       env_name: APP_USER
-    - path: secret/ci/app password
+    - path: secret/ci/app
       key: password
       env_name: APP_PASSWORD
 
