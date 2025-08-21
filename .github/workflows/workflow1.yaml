@@ -10,6 +10,7 @@ permissions:
   contents: read
 env:
   YAML_CONFIG: myvars.yaml
+  ENV_NAME: test
 
 jobs:
   parse_yaml:
@@ -29,7 +30,7 @@ jobs:
           with open(file_path) as f:
               data = yaml.safe_load(f)
           
-          json_str = json.dumps(data)
+          json_str = json.dumps(data.test)
           with open(os.environ["GITHUB_OUTPUT"], "a") as out:
               out.write(f"json={json_str}\n")'
 
@@ -40,18 +41,16 @@ jobs:
   fetch-secrets:
     runs-on: [self-hosted]
     needs: parse_yaml
-    env:
-      ENV_NAME: test
     steps:
       - uses: actions/checkout@v4
 
       - name: Get Vault Secrets (KV v1)
         uses: hashicorp/vault-action@v3.4.0
         with:
-          url: ${{ fromJSON(needs.parse_yaml.outputs.json).test.url }}
+          url: ${{ fromJSON(needs.parse_yaml.outputs.json).url }}
           method: jwt
-          role: ${{ fromJSON(needs.parse_yaml.outputs.json).test.role }}
-          path: ${{ fromJSON(needs.parse_yaml.outputs.json).test.path }}
+          role: ${{ fromJSON(needs.parse_yaml.outputs.json).role }}
+          path: ${{ fromJSON(needs.parse_yaml.outputs.json).path }}
           exportEnv: true
           tlsSkipVerify: true
           secrets: |
