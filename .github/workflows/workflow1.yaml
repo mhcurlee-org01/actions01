@@ -61,7 +61,7 @@ jobs:
 
           # Build block with the "|" header
           {
-            echo "secrets=|"
+            echo "secrets= |"
             jq -r '.test.secrets[] | "  \(.path) \(.key) | \(.env_name)"' <<<"$j"
           } >> "$GITHUB_OUTPUT"
 
@@ -75,10 +75,10 @@ jobs:
           path: ${{ steps.vars.outputs.path }}
           exportEnv: true
           tlsSkipVerify: true
-          secrets: ${{ steps.vars.outputs.secrets }}
+          secrets: |
+            secret/ci/app user | APP_USER ;
+            secret/ci/app password | APP_PASSWORD
             
-             
-
 
       - name: test env
         run: | 
