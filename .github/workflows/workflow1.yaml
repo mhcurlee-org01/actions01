@@ -33,6 +33,7 @@ jobs:
           with open(os.environ["GITHUB_OUTPUT"], "a") as out:
               out.write(f"json={json_str}\n")'
 
+      - name: Debug output value
         run: "echo Output was: ${{ steps.convert.outputs.config_json }} "
 
 
