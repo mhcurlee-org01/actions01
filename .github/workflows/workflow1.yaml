@@ -60,15 +60,15 @@ jobs:
           echo "ROLE=$(echo $JSON_CONFIG | jq -r '.test.rolename')" >> $GITHUB_ENV
           echo "JWT_PATH=$(echo $JSON_CONFIG | jq -r '.test.path')" >> $GITHUB_ENV
 
-      - name: Format Vault secrets from JSON
+      - name: Format Vault secrets into single-line JSON array
         id: format_secrets
         run: |
-          echo "secrets<<EOF" >> $GITHUB_OUTPUT
-          echo "$JSON_CONFIG" | jq -r '.test.secrets[] | "\(.path) \(.key) | \(.env_name)"' >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          jq -nc --argjson secrets "$JSON_CONFIG" \
+            '$secrets.test.secrets | map("\(.path) \(.key) | \(.env_name)")' > secrets.json
+      
+          echo "secrets=$(cat secrets.json)" >> $GITHUB_OUTPUT
         env:
           JSON_CONFIG: ${{ env.JSON_CONFIG }}
-
     
 
       - name: Get Vault Secrets (KV v1)
@@ -80,8 +80,8 @@ jobs:
           path: ${{ env.VAULT_PATH }}
           exportEnv: true
           tlsSkipVerify: true
-          secrets: |
-            ${{ steps.format_secrets.outputs.secrets }}
+          secrets: ${{ join(fromJson(steps.format_secrets.outputs.secrets), '
+                   ') }}
              
 
 
