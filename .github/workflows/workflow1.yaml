@@ -32,10 +32,10 @@ jobs:
       - name: Get Vault Secrets
         uses: hashicorp/vault-action@v3.4.0
         with:
-          url: ${{ fromJSON(needs.parse_yaml.outputs.json).url }}
+          url: ${{ fromJSON(needs.step.convert.outputs.json).url }}
           method: jwt
-          role: ${{ fromJSON(needs.parse_yaml.outputs.json).role }}
-          path: ${{ fromJSON(needs.parse_yaml.outputs.json).path }}
+          role: ${{ fromJSON(needs.step.convert.outputs.json).role }}
+          path: ${{ fromJSON(needs.step.convert.outputs.json).path }}
           exportEnv: true
           tlsSkipVerify: true
           secrets: | 
