@@ -24,7 +24,7 @@ jobs:
         
       - name: Convert YAML to JSON + build secrets block
         id: convert
-        run: python3 scripts/parse_env.py
+        run: python3 scripts/parse_auth.py
 
       - name: Get Vault Secrets
         uses: hashicorp/vault-action@v3.4.0
