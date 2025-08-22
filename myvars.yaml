@@ -8,7 +8,8 @@ timeoutSeconds: 30
 environment: production
 
 
-# TEST ENV
+# AUTH_PROFILE
+
 test:
   url:  http://192.168.5.17:8200
   role: github-actions 

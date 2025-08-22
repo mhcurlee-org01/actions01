@@ -9,16 +9,16 @@ except ImportError:
 
 
 def main():
-    env_name  = os.getenv("ENV_NAME")
+    env_name  = os.getenv("AUTH_PROFILE")
     yaml_file = os.getenv("YAML_CONFIG")
     if not env_name:
-        print("ENV_NAME is required", file=sys.stderr); sys.exit(1)
+        print("AUTH_PROFILE is required", file=sys.stderr); sys.exit(1)
 
     with open(yaml_file) as f:
         y = yaml.safe_load(f)
 
     if env_name not in y:
-        print(f"ENV_NAME '{env_name}' not found in {yaml_file}", file=sys.stderr)
+        print(f"AUTH_PROFILE '{env_name}' not found in {yaml_file}", file=sys.stderr)
         sys.exit(1)
 
     section = y[env_name]

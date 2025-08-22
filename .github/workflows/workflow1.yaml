@@ -10,7 +10,7 @@ permissions:
   contents: read
 env:
   YAML_CONFIG: myvars.yaml
-  ENV_NAME: test
+  AUTH_PROFILE: test
 
 jobs:
   parse_yaml:
