@@ -62,4 +62,10 @@ jobs:
             echo "❌ Secrets do NOT match expected values."; exit 1;
           fi
 
+      - name: Get all json
+        id: get_json
+        run: python3 scripts/parse_all.py
    
+      - name: print all json
+        run: |
+          echo "${{ steps.get_json.outputs.json }}"
