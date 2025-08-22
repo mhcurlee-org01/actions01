@@ -68,4 +68,4 @@ jobs:
    
       - name: print all json
         run: |
-          echo "${{ fromJSON(steps.get_json.outputs.json).test }}"
+          echo "${{ fromJSON(steps.get_json.outputs.json).test.url }}"
