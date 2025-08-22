@@ -39,7 +39,7 @@ jobs:
           exportEnv: true
           tlsSkipVerify: true
           secrets: | 
-            ${{ needs.parse_yaml.outputs.secrets }}
+            ${{ needs.step.convert.outputs.secrets }}
             
           
       - name: Use secrets
