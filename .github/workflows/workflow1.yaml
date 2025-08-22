@@ -8,9 +8,6 @@ on:
 permissions:
   id-token: write
   contents: read
-env:
-  YAML_CONFIG: myvars.yaml
-  AUTH_PROFILE: test
 
 jobs:
   get_secrets:
@@ -23,6 +20,9 @@ jobs:
         run: python3 -m pip install --user pyyaml
         
       - name: Convert YAML to JSON + build secrets block
+        env:
+          YAML_CONFIG: myvars.yaml
+          AUTH_PROFILE: test
         id: convert
         run: python3 .github/workflows/scripts/parse_auth.py
 
@@ -64,6 +64,8 @@ jobs:
 
       - name: Get all json
         id: get_json
+        env:
+          YAML_CONFIG: myvars.yaml
         run: python3 .github/workflows/scripts/parse_all.py
 
       - name: print all json
