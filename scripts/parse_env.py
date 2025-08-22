@@ -10,7 +10,7 @@ except ImportError:
 
 def main():
     env_name  = os.getenv("ENV_NAME")
-    yaml_file = os.getenv("YAML_CONFIG", "myvars.yaml")
+    yaml_file = os.getenv("YAML_CONFIG")
     if not env_name:
         print("ENV_NAME is required", file=sys.stderr); sys.exit(1)
 
