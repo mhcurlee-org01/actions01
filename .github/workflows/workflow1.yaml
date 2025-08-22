@@ -83,8 +83,7 @@ jobs:
           exportEnv: true
           tlsSkipVerify: true
           secrets: | 
-            ${{ steps.get_json.outputs.test.secrets.path[0] }}  ${{ steps.get_json.outputs.test.secrets.key[0]}} | ${{ steps.get_json.outputs.test.secrets.env_name[0]}}
-            ${{ steps.get_json.outputs.test.secrets.path[1] }}  ${{ steps.get_json.outputs.test.secrets.key[1]}} | ${{ steps.get_json.outputs.test.secrets.env_name[1]}}
+            ${{ fromJSON(steps.get_json.outputs.json).test.secrets.path[0] }}  ${{ fromJSON(steps.get_json.outputs.json).test.secrets.key[0]}} | ${{ fromJSON(steps.get_json.outputs.json).test.secrets.env_name[0]}}
   check_output:
     runs-on: [self-hosted]
     needs: get_secrets
