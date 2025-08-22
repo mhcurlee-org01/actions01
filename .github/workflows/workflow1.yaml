@@ -67,7 +67,5 @@ jobs:
         run: python3 scripts/parse_all.py
    
       - name: print all json
-        env:
-          JSON: ${{ steps.get_json.outputs.json }}
         run: |
-          jq <<< "$JSON"
+          echo "${{ fromJSON(steps.get_json.outputs.json).test }}"
