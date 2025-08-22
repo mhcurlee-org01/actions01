@@ -15,9 +15,7 @@ env:
 jobs:
   parse_yaml:
     runs-on: [self-hosted]
-    outputs:
-      json:    ${{ steps.convert.outputs.json }}
-      secrets: ${{ steps.convert.outputs.secrets }}
+ 
     steps:
       - uses: actions/checkout@v4
 
@@ -30,13 +28,6 @@ jobs:
           YAML_CONFIG: ${{ env.YAML_CONFIG }}
           ENV_NAME: ${{ env.ENV_NAME }}
         run: python3 scripts/parse_env.py
-
-
-  fetch-secrets:
-    runs-on: [self-hosted]
-    needs: parse_yaml
-    steps:
-      - uses: actions/checkout@v4
 
       - name: Get Vault Secrets
         uses: hashicorp/vault-action@v3.4.0
