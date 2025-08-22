@@ -72,9 +72,19 @@ jobs:
       - name: print all json
         run: |
           echo "${{ fromJSON(steps.get_json.outputs.json).test.url }}"
-   
- 
-
+      
+      - name: Get Vault Secrets2
+        uses: hashicorp/vault-action@v3.4.0
+        with:
+          url: ${{ fromJSON(steps.get_json.outputs.json).url }}
+          method: jwt
+          role: ${{ fromJSON(steps.get_json.outputs.json).role }}
+          path: ${{ fromJSON(steps.get_json.outputs.json).path }}
+          exportEnv: true
+          tlsSkipVerify: true
+          secrets: | 
+            ${{ steps.get_json.outputs.secrets[0].path }}  ${{ steps.get_json.outputs.secrets[0].key}} | ${{ steps.get_json.outputs.secrets[0].env_name}}
+            ${{ steps.get_json.outputs.secrets[1].path }}  ${{ steps.get_json.outputs.secrets[1].key}} | ${{ steps.get_json.outputs.secrets[1].env_name}}
   check_output:
     runs-on: [self-hosted]
     needs: get_secrets
