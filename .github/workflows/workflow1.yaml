@@ -13,7 +13,7 @@ env:
   AUTH_PROFILE: test
 
 jobs:
-  parse_yaml:
+  get_secrets:
     runs-on: [self-hosted]
  
     steps:
