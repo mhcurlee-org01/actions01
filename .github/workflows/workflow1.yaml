@@ -38,7 +38,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Get Vault Secrets (KV v1)
+      - name: Get Vault Secrets
         uses: hashicorp/vault-action@v3.4.0
         with:
           url: ${{ fromJSON(needs.parse_yaml.outputs.json).url }}
