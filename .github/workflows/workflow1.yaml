@@ -12,7 +12,8 @@ permissions:
 jobs:
   get_secrets:
     runs-on: [self-hosted]
- 
+    outputs:
+      json: ${{steps.get_json.outputs.json}}
     steps:
       - uses: actions/checkout@v4
 
@@ -71,3 +72,16 @@ jobs:
       - name: print all json
         run: |
           echo "${{ fromJSON(steps.get_json.outputs.json).test.url }}"
+   
+ 
+
+  check_output:
+    runs-on: [self-hosted]
+    needs: get_secrets
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: print all json
+        run: |
+          echo "${{ fromJSON(needs.get_secrets.outputs.json).test.url }}"
+    
