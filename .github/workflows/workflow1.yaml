@@ -85,14 +85,16 @@ jobs:
             cat /tmp/secrets.txt
             echo 'EOF'
           } >> "$GITHUB_OUTPUT"
-      
+
       - name: Get Vault Secrets2
         uses: hashicorp/vault-action@v3.4.0
+        env:
+          AUTH_PROFILE: test
         with:
-          url: ${{ fromJSON(steps.get_json.outputs.json).test.url }}
+          url: ${{ fromJSON(steps.get_json.outputs.json)[env.AUTH_PROFILE].url }}
           method: jwt
-          role: ${{ fromJSON(steps.get_json.outputs.json).test.role }}
-          path: ${{ fromJSON(steps.get_json.outputs.json).test.path }}
+          role: ${{ fromJSON(steps.get_json.outputs.json)[env.AUTH_PROFILE].role }}
+          path: ${{ fromJSON(steps.get_json.outputs.json)[env.AUTH_PROFILE].path }}
           exportEnv: true
           tlsSkipVerify: true
           secrets: | 
