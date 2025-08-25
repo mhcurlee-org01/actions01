@@ -20,10 +20,10 @@ jobs:
       - name: Install PyYAML
         run: python3 -m pip install --user pyyaml
 
-      - name: Install Ansible
+      - name: Setup Ansible
         run: python3 -m pip install ansible --user pyyaml
 
-      - name: Install zscaler
+      - name: Setup zscaler
         run: ansible-galaxy collection install zscaler.zpacloud
 
    
