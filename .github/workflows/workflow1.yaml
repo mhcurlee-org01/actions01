@@ -19,7 +19,14 @@ jobs:
 
       - name: Install PyYAML
         run: python3 -m pip install --user pyyaml
-        
+
+      - name: Install Ansible
+        run: python3 -m pip install ansible --user pyyaml
+
+      - name: Install zscaler
+        run: ansible-galaxy collection install zscaler.zpacloud
+
+   
       - name: Convert YAML to JSON + build secrets block
         env:
           YAML_CONFIG: myvars.yaml
