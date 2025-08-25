@@ -1,0 +1,25 @@
+name: ZPA
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  get_secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install PyYAML
+        run: python3 -m pip install --user pyyaml
+
+      - name: Setup Ansible
+        run: python3 -m pip install ansible --user pyyaml
+
+      - name: Setup zscaler
+        run: ansible-galaxy collection install zscaler.zpacloud
