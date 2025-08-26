@@ -1,0 +1,140 @@
+(pyenv) marvin@ubuntu:~/terraform$ cat netpol.yaml 
+- hosts: all
+  gather_facts: false
+  tasks:
+
+
+    - name: Create a NetworkPolicy to allow egress 1000 
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: networking.k8s.io/v1
+          kind: NetworkPolicy
+          metadata:
+            name: "{{ u.name }}" 
+            namespace: test2 
+          spec:
+            podSelector: {}  # Apply to all pods
+            policyTypes:
+              - Egress
+            egress:
+              - to:
+                  - ipBlock: "{{ u.ip-block }}"
+      loop: "{{ updates }}"
+      loop_control:
+        loop_var: u
+(pyenv) marvin@ubuntu:~/terraform$ :q
+:q: command not found
+(pyenv) marvin@ubuntu:~/terraform$ 
+(pyenv) marvin@ubuntu:~/terraform$ 
+(pyenv) marvin@ubuntu:~/terraform$ ls -lahrt
+total 2.9M
+-rw-r--r-- 1 marvin marvin  191 Jul 15 22:45 terraform.tf
+-rw-r--r-- 1 marvin marvin 299K Jul 15 23:57 main.tf
+-rw-r--r-- 1 marvin marvin 501K Jul 16 01:00 network-policy.yaml
+-rw-r--r-- 1 marvin marvin 221K Jul 16 01:18 native.yaml
+-rw-r--r-- 1 marvin marvin  74K Jul 16 01:58 copy.zip
+drwxr-xr-x 3 marvin marvin 4.0K Jul 16 01:59 .terraform
+-rw-r--r-- 1 marvin marvin 1.2K Jul 16 01:59 .terraform.lock.hcl
+-rw------- 1 marvin marvin  199 Jul 16 02:31 .terraform.tfstate.lock.info
+-rw-rw-r-- 1 marvin marvin 1.7M Jul 16 02:31 terraform.tfstate.backup
+-rw-r--r-- 1 marvin marvin    0 Jul 16 02:31 terraform.tfstate
+-rw-rw-r-- 1 marvin marvin   97 Aug 26 00:52 data.json
+-rw-rw-r-- 1 marvin marvin  313 Aug 26 00:53 test.yaml
+-rw-rw-r-- 1 marvin marvin   44 Aug 26 00:55 inventory.ini
+-rw-r--r-- 1 marvin marvin  172 Aug 26 00:55 ansible.cfg
+-rw-rw-r-- 1 marvin marvin  790 Aug 26 01:21 ip.json
+-rw-rw-r-- 1 marvin marvin  599 Aug 26 01:37 netpol.yaml
+drwxr-x--- 9 marvin marvin 4.0K Aug 26 01:37 ..
+drwxrwxr-x 3 marvin marvin 4.0K Aug 26 01:37 .
+(pyenv) marvin@ubuntu:~/terraform$ cat ip.json 
+{
+  "updates": [
+    {
+      "name": "alpha-reef",
+      "ip-block": "10.23.40.0/24"
+    },
+    {
+      "name": "bravo-sky",
+      "ip-block": "192.168.56.0/24"
+    },
+    {
+      "name": "charlie-mint",
+      "ip-block": "172.20.0.0/16"
+    },
+    {
+      "name": "delta-frost",
+      "ip-block": "10.200.32.0/20"
+    },
+    {
+      "name": "echo-haze",
+      "ip-block": "192.168.10.0/23"
+    },
+    {
+      "name": "foxtrot-vine",
+      "ip-block": "172.31.240.0/20"
+    },
+    {
+      "name": "golf-ember",
+      "ip-block": "10.8.8.0/24"
+    },
+    {
+      "name": "hotel-sable",
+      "ip-block": "192.168.100.0/22"
+    },
+    {
+      "name": "india-quartz",
+      "ip-block": "172.16.128.0/19"
+    },
+    {
+      "name": "juliet-cinder",
+      "ip-block": "10.99.0.0/17"
+    }
+  ]
+}
+(pyen
+
+
+
+
+
+(pyenv) marvin@ubuntu:~/terraform$ ansible-playbook  netpol.yaml -e @ip.json -e ansible_python_interpreter=~/pyenv/bin/python 
+
+PLAY [all] ***********************************************************************************************************************************************************************
+
+TASK [Create a NetworkPolicy to allow egress 1000] *******************************************************************************************************************************
+ok: [localhost] => (item={'name': 'alpha-reef', 'ip-block': '10.23.40.0/24'})
+ok: [localhost] => (item={'name': 'bravo-sky', 'ip-block': '192.168.56.0/24'})
+ok: [localhost] => (item={'name': 'charlie-mint', 'ip-block': '172.20.0.0/16'})
+ok: [localhost] => (item={'name': 'delta-frost', 'ip-block': '10.200.32.0/20'})
+ok: [localhost] => (item={'name': 'echo-haze', 'ip-block': '192.168.10.0/23'})
+ok: [localhost] => (item={'name': 'foxtrot-vine', 'ip-block': '172.31.240.0/20'})
+ok: [localhost] => (item={'name': 'golf-ember', 'ip-block': '10.8.8.0/24'})
+ok: [localhost] => (item={'name': 'hotel-sable', 'ip-block': '192.168.100.0/22'})
+ok: [localhost] => (item={'name': 'india-quartz', 'ip-block': '172.16.128.0/19'})
+ok: [localhost] => (item={'name': 'juliet-cinder', 'ip-block': '10.99.0.0/17'})
+
+PLAY RECAP ***********************************************************************************************************************************************************************
+localhost                  : ok=1    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
+(pyenv) marvin@ubuntu:~/terraform$ vim netpol.yaml 
+(pyenv) marvin@ubuntu:~/terraform$ ansible-playbook  netpol.yaml -e @ip.json -e ansible_python_interpreter=~/pyenv/bin/python 
+
+PLAY [all] ***********************************************************************************************************************************************************************
+
+TASK [Create a NetworkPolicy to allow egress 1000] *******************************************************************************************************************************
+changed: [localhost] => (item={'name': 'alpha-reef', 'ip-block': '10.23.40.0/24'})
+changed: [localhost] => (item={'name': 'bravo-sky', 'ip-block': '192.168.56.0/24'})
+changed: [localhost] => (item={'name': 'charlie-mint', 'ip-block': '172.20.0.0/16'})
+changed: [localhost] => (item={'name': 'delta-frost', 'ip-block': '10.200.32.0/20'})
+changed: [localhost] => (item={'name': 'echo-haze', 'ip-block': '192.168.10.0/23'})
+changed: [localhost] => (item={'name': 'foxtrot-vine', 'ip-block': '172.31.240.0/20'})
+changed: [localhost] => (item={'name': 'golf-ember', 'ip-block': '10.8.8.0/24'})
+changed: [localhost] => (item={'name': 'hotel-sable', 'ip-block': '192.168.100.0/22'})
+changed: [localhost] => (item={'name': 'india-quartz', 'ip-block': '172.16.128.0/19'})
+changed: [localhost] => (item={'name': 'juliet-cinder', 'ip-block': '10.99.0.0/17'})
+
+PLAY RECAP ***********************************************************************************************************************************************************************
+localhost                  : ok=1    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
+(pyenv) marvin@ubuntu:~/terraform$ 
