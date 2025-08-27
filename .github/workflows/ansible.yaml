@@ -23,3 +23,6 @@ jobs:
 
       - name: Setup zscaler
         run: ansible-galaxy collection install zscaler.zpacloud
+
+      - name: test ansible
+        run: ansible-playbook --version
