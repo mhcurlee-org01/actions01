@@ -27,7 +27,7 @@ jobs:
 
       - name: Setup ZPA Collection
         run: | 
-          $VENV/bin/ansible-galaxy collection install zscaler.zpacloud:==2.0.5
+          $VENV/bin/ansible-galaxy collection install -r src/ansible/requirements.yaml
 
       - name: test ansible
         run: $VENV/bin/ansible-playbook --version

@@ -1,0 +1,6 @@
+---
+collections:
+  # Install a collection from Ansible Galaxy.
+  - name: zscaler.zpacloud
+    version: "2.0.5"
+    source: https://galaxy.ansible.com
