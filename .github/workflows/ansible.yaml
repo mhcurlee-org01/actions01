@@ -12,17 +12,22 @@ permissions:
 jobs:
   get_secrets:
     runs-on: ubuntu-latest
+    env:
+      VENV: .venv
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install PyYAML
-        run: python3 -m pip install --user pyyaml
+      - name: Create Python venv
+        run: python3 -m venv $VENV
 
-      - name: Setup Ansible
-        run: python3 -m pip install ansible --user pyyaml
+      - name: Setup Ansible and Deps
+        run: |  
+          $VENV/bin/python -m pip -U pip wheel
+          $VENV/bin/pip install -r src/ansible/requirements.txt
 
-      - name: Setup zscaler
-        run: ansible-galaxy collection install zscaler.zpacloud
+      - name: Setup ZPA Collection
+        run: | 
+          $VENV/bin/ansible-galaxy collection install zscaler.zpacloud:==2.0.5
 
       - name: test ansible
-        run: ansible-playbook --version
+        run: $VENV/bin/ansible-playbook --version
