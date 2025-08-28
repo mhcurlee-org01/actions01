@@ -22,7 +22,7 @@ jobs:
 
       - name: Setup Ansible and Deps
         run: |  
-          $VENV/bin/python -m pip -U pip wheel
+          $VENV/bin/python -m pip install -U pip wheel
           $VENV/bin/pip install -r src/ansible/requirements.txt
 
       - name: Setup ZPA Collection
