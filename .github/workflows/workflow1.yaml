@@ -4,6 +4,15 @@ on:
   push:
     branches: [ "main" ]
   workflow_dispatch:
+    inputs:
+      skip_terraform:
+        description: Skip the Terraform workflow for this manual run
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'false'
+          - 'true'
 
 permissions:
   id-token: write
