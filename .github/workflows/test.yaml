@@ -2,8 +2,11 @@ name: Schedule Test
 
 on:
   schedule:
-    - cron: "0 18 * * *"
-    - cron: "30 18 * * *"
+    - cron: "0 14 * * *"
+      timezone: "America/Chicago"
+    - cron: "30 14 * * *"
+      timezone: "America/Chicago"
+  workflow_dispatch:
 
   workflow_dispatch:
 
@@ -22,10 +25,10 @@ jobs:
     if: github.event.schedule == '0 18 * * *'
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Hello World from 1:00 PM Central"
+      - run: echo "Hello World from 2:00 PM Central"
 
   one-thirty:
     if: github.event.schedule == '30 18 * * *'
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Hello World from 1:30 PM Central"
+      - run: echo "Hello World from 2:30 PM Central"
