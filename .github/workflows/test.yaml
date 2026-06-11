@@ -1,0 +1,35 @@
+name: Schedule Context Test
+
+on:
+  workflow_dispatch:
+
+  schedule:
+    # adjust these times if you don't want to wait
+    - cron: "15 12 * * *"
+    - cron: "20 12 * * *"
+
+jobs:
+  debug:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Show GitHub context values
+        run: |
+          echo "event_name = ${{ github.event_name }}"
+          echo "schedule   = ${{ github.event.schedule }}"
+
+  morning-job:
+    if: github.event.schedule == '15 12 * * *'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Morning hello
+        run: echo "hello world from 8AM schedule"
+
+  evening-job:
+    if: github.event.schedule == '20 12 * *'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Evening hello
+        run: echo "hello world from 8PM schedule"
