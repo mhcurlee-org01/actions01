@@ -8,7 +8,6 @@ on:
       timezone: "America/Chicago"
   workflow_dispatch:
 
-  workflow_dispatch:
 
 jobs:
   debug:
