@@ -1,8 +1,6 @@
 name: Fetch KV v1 secrets from Vault via OIDC
 
 on:
-  push:
-    branches: [ "main" ]
   workflow_dispatch:
     inputs:
       skip_terraform:
